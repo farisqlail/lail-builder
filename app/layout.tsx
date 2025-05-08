@@ -6,7 +6,7 @@ import { Providers } from "@/app/providers"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Web Component Builder",
+  title: "Lail Builder",
   description: "Build websites by selecting components from different categories",
     generator: 'v0.dev'
 }

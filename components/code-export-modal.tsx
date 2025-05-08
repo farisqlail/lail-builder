@@ -68,12 +68,8 @@ export default function HomePage() {
   }
 
   const getComponentSourceCode = (category, componentId) => {
-    // This would return the JSX part of the component
-    // For simplicity, we'll extract it from the component's render function
     const Component = ComponentLibrary[category][componentId]
 
-    // For demonstration, we'll return a simplified version
-    // In a real app, you'd need to analyze the component's source code
     switch (componentId) {
       case "simple-header":
         return `<header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">

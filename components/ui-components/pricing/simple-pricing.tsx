@@ -41,13 +41,13 @@ export default function SimplePricing() {
                   </li>
                 )}
               </ul>
-              <button
+              <a href="#"
                 className={`w-full py-2 rounded-md ${
                   index === 1 ? "bg-primary text-white" : "border border-gray-300 dark:border-gray-700"
                 }`}
               >
                 {index === 0 ? "Get Started" : "Subscribe"}
-              </button>
+              </a>
             </div>
           ))}
         </div>

@@ -18,7 +18,9 @@ export default function SimpleHeader() {
           </a>
         </nav>
         <div className="flex items-center space-x-3">
-          <button className="px-4 py-2 rounded-md bg-primary text-white">Sign Up</button>
+          <a href="#" className="px-4 py-2 rounded-md bg-primary text-white text-center">
+            Sign Up
+          </a>
         </div>
       </div>
     </header>

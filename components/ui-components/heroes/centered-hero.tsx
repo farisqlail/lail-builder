@@ -7,10 +7,10 @@ export default function CenteredHero() {
           Create stunning, responsive websites with our component library. Mix and match to build your perfect site.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <button className="px-6 py-3 rounded-md bg-primary text-white font-medium">Get Started</button>
-          <button className="px-6 py-3 rounded-md border border-gray-300 dark:border-gray-700 font-medium">
+          <a href="#" className="px-6 py-3 rounded-md bg-primary text-white font-medium">Get Started</a>
+          <a href="#" className="px-6 py-3 rounded-md border border-gray-300 dark:border-gray-700 font-medium">
             Learn More
-          </button>
+          </a>
         </div>
       </div>
     </section>

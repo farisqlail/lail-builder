@@ -40,13 +40,13 @@ export default function TieredPricing() {
                     </li>
                   ))}
                 </ul>
-                <button
+                <a href="#"
                   className={`w-full py-3 rounded-md ${
                     index === 1 ? "bg-primary text-white" : "border border-gray-300 dark:border-gray-700"
                   }`}
                 >
                   Get Started
-                </button>
+                </a>
               </div>
             </div>
           ))}

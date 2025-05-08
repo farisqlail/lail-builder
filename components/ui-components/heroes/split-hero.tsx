@@ -9,10 +9,10 @@ export default function SplitHero() {
               Our component builder makes it simple to create beautiful, responsive websites without writing code.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="px-6 py-3 rounded-md bg-primary text-white font-medium">Start Building</button>
-              <button className="px-6 py-3 rounded-md border border-gray-300 dark:border-gray-700 font-medium">
+              <a href="#" className="px-6 py-3 rounded-md bg-primary text-white font-medium">Start Building</a>
+              <a href="#" className="px-6 py-3 rounded-md border border-gray-300 dark:border-gray-700 font-medium">
                 Watch Demo
-              </button>
+              </a>
             </div>
           </div>
           <div className="md:w-1/2">

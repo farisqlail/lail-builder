@@ -8,10 +8,10 @@ export default function SimpleCta() {
             Join thousands of users who are already building beautiful websites with our platform.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="px-6 py-3 rounded-md bg-primary text-white font-medium">Start Building Now</button>
-            <button className="px-6 py-3 rounded-md border border-gray-300 dark:border-gray-700 font-medium">
+            <a href="#" className="px-6 py-3 rounded-md bg-primary text-white font-medium">Start Building Now</a>
+            <a href="#" className="px-6 py-3 rounded-md border border-gray-300 dark:border-gray-700 font-medium">
               Contact Sales
-            </button>
+            </a>
           </div>
         </div>
       </div>

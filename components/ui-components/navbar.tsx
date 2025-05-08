@@ -23,7 +23,7 @@ export function NavbarComponent({ onExport }: NavbarComponentProps) {
       <div className="px-4 py-4 flex justify-between items-center w-full">
         <div className="font-bold text-xl">Lail Builder</div>
         <div>
-          <Button color="primary" variant="flat" startContent={<Save size={16} />}>
+          {/* <Button color="primary" variant="flat" startContent={<Save size={16} />}>
             Save Project
           </Button>
           <Button color="secondary" variant="flat" startContent={<Code size={16} />} onPress={onExport}>
@@ -41,7 +41,7 @@ export function NavbarComponent({ onExport }: NavbarComponentProps) {
               </DropdownItem>
               <DropdownItem key="preferences">Preferences</DropdownItem>
             </DropdownMenu>
-          </Dropdown>
+          </Dropdown> */}
           <ThemeToggle />
         </div>
       </div>

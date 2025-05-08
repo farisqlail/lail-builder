@@ -11,7 +11,7 @@ export default function BoxedCta() {
               </p>
             </div>
             <div className="flex-shrink-0">
-              <button className="px-6 py-3 rounded-md bg-primary text-white font-medium">Get Started</button>
+              <a href="#" className="px-6 py-3 rounded-md bg-primary text-white font-medium">Get Started</a>
             </div>
           </div>
         </div>

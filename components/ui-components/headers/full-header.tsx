@@ -39,8 +39,8 @@ export default function FullHeader() {
             </a>
           </nav>
           <div className="flex items-center space-x-3">
-            <button className="px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700">Login</button>
-            <button className="px-4 py-2 rounded-md bg-primary text-white">Get Started</button>
+            <a href="#" className="px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700">Login</a>
+            <a href="#" className="px-4 py-2 rounded-md bg-primary text-white">Get Started</a>
           </div>
         </div>
       </div>
