@@ -15,7 +15,6 @@ export default function LandingPage() {
     
     return (
         <div className="min-h-screen">
-            {/* Hero Section */}
             <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
                 <div className="container mx-auto px-4 py-4 flex justify-between items-center">
                     <div className="font-bold text-xl">Lail Builder</div>
@@ -41,7 +40,6 @@ export default function LandingPage() {
                 </div>
             </header>
 
-            {/* Hero Section */}
             <section className="py-20 bg-white dark:bg-gray-900" data-aos="fade-up">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-col md:flex-row items-center">
