@@ -4,7 +4,7 @@ import type React from "react"
 
 import { ComponentLibrary } from "@/lib/component-library"
 import { Button } from "@nextui-org/react"
-import { Code, Trash2 } from "lucide-react"
+import { Code, Trash2, Type } from "lucide-react"
 import { useDrop } from "react-dnd"
 
 interface PreviewAreaProps {
@@ -18,19 +18,23 @@ interface PreviewAreaProps {
     footer: string | null
   }
   componentColors: Record<string, string>
+  customTextContent: Record<string, any>
   onExport: () => void
   onRemoveComponent: (category: string) => void
   onDropComponent: (item: { type: string; id: string }) => void
   onColorChange: (category: string, color: string) => void
+  onEditComponent: (category: string, componentId: string) => void
 }
 
 export function PreviewArea({
   selectedComponents,
   componentColors,
+  customTextContent,
   onExport,
   onRemoveComponent,
   onDropComponent,
   onColorChange,
+  onEditComponent,
 }: PreviewAreaProps) {
   const hasSelectedComponents = Object.values(selectedComponents).some((value) => value !== null)
 
@@ -75,7 +79,6 @@ export function PreviewArea({
             {Object.entries(selectedComponents).map(([category, componentId]) => {
               if (!componentId) return null
 
-              // Check if the category and component exist in the library
               if (!ComponentLibrary[category] || !ComponentLibrary[category][componentId]) {
                 console.error(`Component not found: ${category}/${componentId}`)
                 return (
@@ -90,11 +93,23 @@ export function PreviewArea({
 
               const Component = ComponentLibrary[category][componentId]
               const color = componentColors[category] || "#3b82f6" // Default to blue if no color is set
+              const textContent = customTextContent[`${category}-${componentId}`] || {}
 
               return (
                 <div key={`${category}-${componentId}`} className="relative group">
                   <div className="absolute right-4 top-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
                     <div className="flex items-center bg-white dark:bg-gray-900 rounded-md shadow p-2">
+                      <Button
+                        isIconOnly
+                        color="primary"
+                        variant="light"
+                        size="sm"
+                        onPress={() => onEditComponent(category, componentId)}
+                        title="Edit text content"
+                        className="mr-2"
+                      >
+                        <Type size={16} />
+                      </Button>
                       <input
                         type="color"
                         value={color}
@@ -118,7 +133,7 @@ export function PreviewArea({
                     className={`component-wrapper component-${category}`}
                     style={{ "--component-color": color } as React.CSSProperties}
                   >
-                    <Component />
+                    <Component textContent={textContent} />
                   </div>
                 </div>
               )
@@ -126,7 +141,7 @@ export function PreviewArea({
           </div>
         )}
       </div>
-      {/* Add custom styling for components */}
+
       <style jsx global>{`
         .component-wrapper [class*="bg-primary"],
         .component-wrapper [class*="bg-blue-"] {
