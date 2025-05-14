@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@nextui-org/react"
 import { ComponentSelector } from "@/components/component-selector"
 import { PreviewArea } from "@/components/preview-area"
@@ -49,6 +49,8 @@ export function BuilderInterface() {
       ...prev,
       [category]: null,
     }))
+
+    // Also remove the color setting for this component
     setComponentColors((prev) => {
       const newColors = { ...prev }
       delete newColors[category]
@@ -57,6 +59,7 @@ export function BuilderInterface() {
   }
 
   const handleDropComponent = (item: { type: string; id: string }) => {
+    // Validate that the component exists before setting it
     if (ComponentLibrary[item.type] && ComponentLibrary[item.type][item.id]) {
       setSelectedComponents((prev) => ({
         ...prev,
@@ -73,6 +76,26 @@ export function BuilderInterface() {
       [category]: color,
     }))
   }
+
+  // Initialize default colors for each component category
+  const initializeDefaultColors = () => {
+    const defaultColors = {
+      header: "#3b82f6", // blue
+      hero: "#3b82f6",
+      features: "#3b82f6",
+      testimonials: "#3b82f6",
+      pricing: "#3b82f6",
+      cta: "#3b82f6",
+      footer: "#3b82f6",
+    }
+
+    setComponentColors(defaultColors)
+  }
+
+  // Call this function when the component mounts
+  useEffect(() => {
+    initializeDefaultColors()
+  }, [])
 
   const categories = Object.keys(ComponentLibrary)
 
