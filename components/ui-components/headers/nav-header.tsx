@@ -1,9 +1,23 @@
-export default function NavHeader({ textContent = {} }) {
+interface NavHeaderProps {
+  textContent?: {
+    companyName?: string;
+    menuItems?: string[];
+    buttonText?: string[];
+  };
+}
+
+export default function NavHeader({
+  textContent = {
+    companyName: "Company Name",
+    menuItems: ["Home", "Products", "Features", "Pricing", "Contact"],
+    buttonText: ["Login", "Sign Up"],
+  },
+}: NavHeaderProps) {
   const {
-    companyName = "Company Name",
-    menuItems = ["Home", "Products", "Features", "Pricing", "Contact"],
-    buttonText = ["Login", "Sign Up"],
-  } = textContent
+    companyName,
+    menuItems = [], // Default empty array for menuItems
+    buttonText = [], // Default empty array for buttonText
+  } = textContent;
 
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
@@ -14,7 +28,7 @@ export default function NavHeader({ textContent = {} }) {
             <div className="font-bold text-xl">{companyName}</div>
           </div>
           <nav className="hidden md:flex space-x-8">
-            {menuItems.map((item, index) => (
+            {menuItems?.map((item, index) => (
               <a
                 key={index}
                 href="#"
@@ -25,13 +39,25 @@ export default function NavHeader({ textContent = {} }) {
             ))}
           </nav>
           <div className="flex items-center space-x-3">
-            <a href="#" className="px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700">
-              {buttonText[0]}
-            </a>
-            <a href="#" className="px-4 py-2 rounded-md bg-primary text-white">{buttonText[1]}</a>
+            {buttonText[0] && (
+              <a
+                href="#"
+                className="px-4 py-2 rounded-md border border-gray-300 dark:border-gray-700"
+              >
+                {buttonText[0]}
+              </a>
+            )}
+            {buttonText[1] && (
+              <a
+                href="#"
+                className="px-4 py-2 rounded-md bg-primary text-white"
+              >
+                {buttonText[1]}
+              </a>
+            )}
           </div>
         </div>
       </div>
     </header>
-  )
+  );
 }

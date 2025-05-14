@@ -236,7 +236,7 @@ export function BuilderInterface() {
       if (!customTextContent[`${category}-${componentId}`]) {
         setCustomTextContent((prev) => ({
           ...prev,
-          [`${category}-${componentId}`]: defaultTextContent[componentId] || {},
+          [`${category}-${componentId}`]: defaultTextContent[componentId] || {}, 
         }))
       }
     } else {
@@ -270,7 +270,7 @@ export function BuilderInterface() {
       if (!customTextContent[`${item.type}-${item.id}`]) {
         setCustomTextContent((prev) => ({
           ...prev,
-          [`${item.type}-${item.id}`]: defaultTextContent[item.id] || {},
+          [`${item.type}-${item.id}`]: defaultTextContent[item.id] || {}, 
         }))
       }
     } else {

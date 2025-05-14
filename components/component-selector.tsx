@@ -1,6 +1,4 @@
-"use client"
-
-import type React from "react"
+import React, { forwardRef } from "react"
 import { Card, CardBody } from "@nextui-org/react"
 import { Check } from "lucide-react"
 import { useDrag } from "react-dnd"
@@ -12,7 +10,12 @@ interface ComponentSelectorProps {
   selectedComponent: string | null
 }
 
-export function ComponentSelector({ category, components, onSelect, selectedComponent }: ComponentSelectorProps) {
+export function ComponentSelector({
+  category,
+  components,
+  onSelect,
+  selectedComponent,
+}: ComponentSelectorProps) {
   if (!components || Object.keys(components).length === 0) {
     return (
       <div className="p-4 bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 rounded-md">
@@ -49,40 +52,51 @@ interface ComponentCardProps {
   Component: React.ComponentType
 }
 
-function ComponentCard({ category, componentId, isSelected, onSelect, Component }: ComponentCardProps) {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: "component",
-    item: { type: category, id: componentId },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }))
+const ComponentCard = forwardRef<HTMLDivElement, ComponentCardProps>(
+  ({ category, componentId, isSelected, onSelect, Component }: ComponentCardProps, ref) => {
+    const [{ isDragging }, drag] = useDrag(() => ({
+      type: "component",
+      item: { type: category, id: componentId },
+      collect: (monitor) => ({
+        isDragging: !!monitor.isDragging(),
+      }),
+    }))
 
-  return (
-    <Card
-      ref={drag}
-      isPressable
-      isHoverable
-      className={`border-2 ${isSelected ? "border-primary" : "border-transparent"} ${isDragging ? "opacity-50" : ""} cursor-grab`}
-      onPress={() => onSelect(category, componentId)}
-    >
-      <CardBody className="p-4">
-        <div className="flex justify-between items-center mb-2">
-          <span className="font-medium">
-            {componentId
-              .split("-")
-              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-              .join(" ")}
-          </span>
-          {isSelected && <Check className="text-primary" size={20} />}
-        </div>
-
-        <div className="mt-2 border border-gray-200 dark:border-gray-800 rounded-md overflow-hidden">
-          <div className="transform scale-[0.4] origin-top-left h-[250px] w-[250%] pointer-events-none">
-            <Component />
+    return (
+      <Card
+        ref={(node) => {
+          drag(node) 
+          if (typeof ref === "function") ref(node)
+        }}
+        isPressable
+        isHoverable
+        className={`border-2 ${isSelected ? "border-primary" : "border-transparent"} ${
+          isDragging ? "opacity-50" : ""
+        } cursor-grab`}
+        onPress={() => onSelect(category, componentId)}
+      >
+        <CardBody className="p-4">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-medium">
+              {componentId
+                .split("-")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" ")}
+            </span>
+            {isSelected && <Check className="text-primary" size={20} />}
           </div>
-        </div>
-      </CardBody>
-    </Card>
-  )
-}
+
+          <div className="mt-2 border border-gray-200 dark:border-gray-800 rounded-md overflow-hidden">
+            <div className="transform scale-[0.4] origin-top-left h-[250px] w-[250%] pointer-events-none">
+              <Component />
+            </div>
+          </div>
+        </CardBody>
+      </Card>
+    )
+  }
+)
+
+ComponentCard.displayName = "ComponentCard"
+
+export default ComponentSelector
