@@ -11,6 +11,7 @@ import { TextCustomizationPanel } from "@/components/text-customization-panel"
 import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 
+// Define the default text content for each component type
 const defaultTextContent = {
   "simple-header": {
     companyName: "Company Name",
@@ -202,7 +203,25 @@ const defaultTextContent = {
   },
 }
 
-export function BuilderInterface() {
+interface BuilderInterfaceProps {
+  initialComponents?: {
+    header: string | null
+    hero: string | null
+    features: string | null
+    testimonials: string | null
+    pricing: string | null
+    cta: string | null
+    footer: string | null
+  } | null
+  initialTextContent?: Record<string, any> | null
+  initialColors?: Record<string, string> | null
+}
+
+export function BuilderInterface({
+  initialComponents = null,
+  initialTextContent = null,
+  initialColors = null,
+}: BuilderInterfaceProps) {
   const [activeCategory, setActiveCategory] = useState("header")
   const [selectedComponents, setSelectedComponents] = useState<{
     header: string | null
@@ -212,31 +231,35 @@ export function BuilderInterface() {
     pricing: string | null
     cta: string | null
     footer: string | null
-  }>({
-    header: null,
-    hero: null,
-    features: null,
-    testimonials: null,
-    pricing: null,
-    cta: null,
-    footer: null,
-  })
-  const [componentColors, setComponentColors] = useState<Record<string, string>>({})
+  }>(
+    initialComponents || {
+      header: null,
+      hero: null,
+      features: null,
+      testimonials: null,
+      pricing: null,
+      cta: null,
+      footer: null,
+    },
+  )
+  const [componentColors, setComponentColors] = useState<Record<string, string>>(initialColors || {})
   const [isExportModalOpen, setIsExportModalOpen] = useState(false)
-  const [customTextContent, setCustomTextContent] = useState<Record<string, any>>({})
+  const [customTextContent, setCustomTextContent] = useState<Record<string, any>>(initialTextContent || {})
   const [activeEditComponent, setActiveEditComponent] = useState<{ category: string; componentId: string } | null>(null)
 
   const handleComponentSelect = (category: string, componentId: string) => {
+    // Validate that the component exists before setting it
     if (ComponentLibrary[category] && ComponentLibrary[category][componentId]) {
       setSelectedComponents((prev) => ({
         ...prev,
         [category]: componentId,
       }))
 
+      // Initialize custom text content if not already set
       if (!customTextContent[`${category}-${componentId}`]) {
         setCustomTextContent((prev) => ({
           ...prev,
-          [`${category}-${componentId}`]: defaultTextContent[componentId] || {}, 
+          [`${category}-${componentId}`]: defaultTextContent[componentId] || {},
         }))
       }
     } else {
@@ -250,27 +273,32 @@ export function BuilderInterface() {
       [category]: null,
     }))
 
+    // Also remove the color setting for this component
     setComponentColors((prev) => {
       const newColors = { ...prev }
       delete newColors[category]
       return newColors
     })
 
+    // Clear active edit component if it's the one being removed
     if (activeEditComponent && activeEditComponent.category === category) {
       setActiveEditComponent(null)
     }
   }
 
   const handleDropComponent = (item: { type: string; id: string }) => {
+    // Validate that the component exists before setting it
     if (ComponentLibrary[item.type] && ComponentLibrary[item.type][item.id]) {
       setSelectedComponents((prev) => ({
         ...prev,
         [item.type]: item.id,
       }))
+
+      // Initialize custom text content if not already set
       if (!customTextContent[`${item.type}-${item.id}`]) {
         setCustomTextContent((prev) => ({
           ...prev,
-          [`${item.type}-${item.id}`]: defaultTextContent[item.id] || {}, 
+          [`${item.type}-${item.id}`]: defaultTextContent[item.id] || {},
         }))
       }
     } else {
@@ -290,20 +318,25 @@ export function BuilderInterface() {
 
     const componentKey = `${activeEditComponent.category}-${activeEditComponent.componentId}`
 
+    // Handle nested properties with dot notation
     if (key.includes(".") || key.includes("[")) {
       const newTextContent = { ...customTextContent[componentKey] }
 
+      // Parse the path and set the value
       const parts = key.split(".")
       let current = newTextContent
 
       for (let i = 0; i < parts.length - 1; i++) {
         const part = parts[i]
+
+        // Handle array notation like "items[0]"
         if (part.includes("[")) {
           const arrayName = part.split("[")[0]
           const index = Number.parseInt(part.split("[")[1].replace("]", ""))
 
           if (!current[arrayName]) current[arrayName] = []
           if (!current[arrayName][index]) {
+            // If it's an object in the array
             if (i < parts.length - 2) {
               current[arrayName][index] = {}
             }
@@ -318,6 +351,7 @@ export function BuilderInterface() {
         }
       }
 
+      // Set the final value
       const lastPart = parts[parts.length - 1]
       if (lastPart.includes("[")) {
         const arrayName = lastPart.split("[")[0]
@@ -334,6 +368,7 @@ export function BuilderInterface() {
         [componentKey]: newTextContent,
       }))
     } else {
+      // Simple property
       setCustomTextContent((prev) => ({
         ...prev,
         [componentKey]: {
@@ -348,20 +383,24 @@ export function BuilderInterface() {
     setActiveEditComponent({ category, componentId })
   }
 
+  // Initialize default colors for each component category
   const initializeDefaultColors = () => {
-    const defaultColors = {
-      header: "#3b82f6", // blue
-      hero: "#3b82f6",
-      features: "#3b82f6",
-      testimonials: "#3b82f6",
-      pricing: "#3b82f6",
-      cta: "#3b82f6",
-      footer: "#3b82f6",
-    }
+    if (!initialColors) {
+      const defaultColors = {
+        header: "#3b82f6", // blue
+        hero: "#3b82f6",
+        features: "#3b82f6",
+        testimonials: "#3b82f6",
+        pricing: "#3b82f6",
+        cta: "#3b82f6",
+        footer: "#3b82f6",
+      }
 
-    setComponentColors(defaultColors)
+      setComponentColors(defaultColors)
+    }
   }
 
+  // Call this function when the component mounts
   useEffect(() => {
     initializeDefaultColors()
   }, [])
@@ -388,17 +427,6 @@ export function BuilderInterface() {
                 </Button>
               ))}
             </div>
-
-            {activeEditComponent && (
-              <TextCustomizationPanel
-                componentType={activeEditComponent.componentId}
-                textContent={
-                  customTextContent[`${activeEditComponent.category}-${activeEditComponent.componentId}`] || {}
-                }
-                onTextChange={handleTextChange}
-              />
-            )}
-
             <div className="mt-4">
               {ComponentLibrary[activeCategory] ? (
                 <ComponentSelector
@@ -413,6 +441,17 @@ export function BuilderInterface() {
                 </div>
               )}
             </div>
+
+            {/* Text Customization Panel */}
+            {activeEditComponent && (
+              <TextCustomizationPanel
+                componentType={activeEditComponent.componentId}
+                textContent={
+                  customTextContent[`${activeEditComponent.category}-${activeEditComponent.componentId}`] || {}
+                }
+                onTextChange={handleTextChange}
+              />
+            )}
           </div>
           <div className="w-2/3 p-4 overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">Preview</h2>

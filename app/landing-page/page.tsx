@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect } from "react";
-import "aos/dist/aos.css"; 
+import "aos/dist/aos.css";
 
 import { Header } from './partial/Header';
 import { Hero } from './partial/Hero';
 import { Features } from './partial/Features';
-import { HowItWork } from './partial/HowItWork'; 
-import { Testimonials } from './partial/Testimonials';
+import { Templates } from './partial/Templates';
+import { HowItWork } from './partial/HowItWork';
 import { Footer } from './partial/Footer';
 
 export default function LandingPage() {
@@ -15,15 +15,15 @@ export default function LandingPage() {
     import("aos").then((Aos) => {
       Aos.init({ duration: 1000 });
     });
-  }, []); 
+  }, []);
 
   return (
     <div className="min-h-screen">
       <Header />
       <Hero />
       <Features />
-      <HowItWork /> 
-      <Testimonials />
+      <Templates />
+      <HowItWork />
       <Footer />
     </div>
   );

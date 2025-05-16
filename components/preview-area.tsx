@@ -53,6 +53,9 @@ export function PreviewArea({
     }),
   }))
 
+  // Sort components in a logical order for display
+  const orderedCategories = ["header", "hero", "features", "testimonials", "pricing", "cta", "footer"]
+
   return (
     <div className="border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden">
       <div className="bg-white dark:bg-gray-900 p-4 flex justify-end gap-2">
@@ -76,9 +79,11 @@ export function PreviewArea({
           </div>
         ) : (
           <div className="preview-container">
-            {Object.entries(selectedComponents).map(([category, componentId]) => {
+            {orderedCategories.map((category) => {
+              const componentId = selectedComponents[category]
               if (!componentId) return null
 
+              // Check if the category and component exist in the library
               if (!ComponentLibrary[category] || !ComponentLibrary[category][componentId]) {
                 console.error(`Component not found: ${category}/${componentId}`)
                 return (
@@ -141,7 +146,7 @@ export function PreviewArea({
           </div>
         )}
       </div>
-
+      {/* Add custom styling for components */}
       <style jsx global>{`
         .component-wrapper [class*="bg-primary"],
         .component-wrapper [class*="bg-blue-"] {
