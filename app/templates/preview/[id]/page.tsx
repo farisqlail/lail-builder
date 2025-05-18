@@ -41,7 +41,7 @@ export default function TemplatePreviewPage() {
   }
 
   const handleEditTemplate = () => {
-    router.push(`/app/builder?template=${template.id}`)
+    router.push(`/builder?template=${template.id}`)
   }
 
   if (isLoading) {

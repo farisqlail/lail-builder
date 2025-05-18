@@ -21,7 +21,7 @@ export function Hero() {
             required.
           </p>
           <div className="mt-10">
-            <Link href="/app/builder">
+            <Link href="/builder">
               <Button className="bg-[#3b82f6] text-white rounded-full px-8 py-6 text-lg hover:bg-[#2563eb] transition-colors">
                 Start Building
               </Button>

@@ -124,7 +124,7 @@ export default function TemplateDetailPage() {
               >
                 Preview Template
               </Button>
-              <Link href={`/app/builder?template=${template.id}`}>
+              <Link href={`/builder?template=${template.id}`}>
                 <Button color="default" variant="flat" size="lg" className="w-full">
                   Skip Preview & Edit
                 </Button>
