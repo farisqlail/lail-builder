@@ -115,13 +115,15 @@ export function PreviewArea({
                       >
                         <Type size={16} />
                       </Button>
-                      <input
-                        type="color"
-                        value={color}
-                        onChange={(e) => onColorChange(category, e.target.value)}
-                        className="w-6 h-6 mr-2 cursor-pointer"
-                        title="Change component color"
-                      />
+                      {/* <div className="flex items-center">
+                        <input
+                          type="color"
+                          value={color}
+                          onChange={(e) => onColorChange(category, e.target.value)}
+                          className="w-8 h-8 rounded-md cursor-pointer border border-gray-300 dark:border-gray-700"
+                          title="Change component color"
+                        />
+                      </div> */}
                       <Button
                         isIconOnly
                         color="danger"
@@ -148,52 +150,61 @@ export function PreviewArea({
       </div>
       {/* Add custom styling for components */}
       <style jsx global>{`
-        .component-wrapper [class*="bg-primary"],
-        .component-wrapper [class*="bg-blue-"] {
-          background-color: var(--component-color) !important;
-        }
-        
-        .component-wrapper [class*="border-primary"],
-        .component-wrapper [class*="border-blue-"] {
-          border-color: var(--component-color) !important;
-        }
-        
-        .component-wrapper [class*="text-primary"],
-        .component-wrapper [class*="text-blue-"] {
-          color: var(--component-color) !important;
-        }
-        
-        .component-wrapper button[class*="bg-primary"],
-        .component-wrapper button[class*="bg-blue-"] {
-          background-color: var(--component-color) !important;
-        }
-        
-        .component-header .w-8.h-8.bg-blue-600,
-        .component-header .w-10.h-10.bg-blue-600,
-        .component-features .w-6.h-6.bg-blue-600,
-        .component-features .w-8.h-8.bg-blue-600 {
-          background-color: var(--component-color) !important;
-        }
-        
-        .component-testimonials .text-5xl.text-blue-600 {
-          color: var(--component-color) !important;
-        }
-        
-        .component-pricing [class*="border-blue-600"] {
-          border-color: var(--component-color) !important;
-        }
-        
-        .component-pricing .bg-blue-600,
-        .component-cta .bg-blue-600,
-        .component-cta .bg-blue-50 {
-          background-color: var(--component-color) !important;
-        }
-        
-        .component-cta .bg-blue-50,
-        .component-cta .dark\:bg-blue-900\/20 {
-          background-color: color-mix(in srgb, var(--component-color) 10%, transparent) !important;
-        }
-      `}</style>
+  .component-wrapper {
+    --component-color: #3b82f6;
+  }
+  
+  .component-wrapper [class*="bg-primary"],
+  .component-wrapper [class*="bg-blue-"] {
+    background-color: var(--component-color) !important;
+  }
+  
+  .component-wrapper [class*="border-primary"],
+  .component-wrapper [class*="border-blue-"] {
+    border-color: var(--component-color) !important;
+  }
+  
+  .component-wrapper [class*="text-primary"],
+  .component-wrapper [class*="text-blue-"] {
+    color: var(--component-color) !important;
+  }
+  
+  .component-wrapper button[class*="bg-primary"],
+  .component-wrapper button[class*="bg-blue-"] {
+    background-color: var(--component-color) !important;
+  }
+  
+  .component-header .w-8.h-8.bg-blue-600,
+  .component-header .w-10.h-10.bg-blue-600,
+  .component-features .w-6.h-6.bg-blue-600,
+  .component-features .w-8.h-8.bg-blue-600 {
+    background-color: var(--component-color) !important;
+  }
+  
+  .component-testimonials .text-5xl.text-blue-600 {
+    color: var(--component-color) !important;
+  }
+  
+  .component-pricing [class*="border-blue-600"] {
+    border-color: var(--component-color) !important;
+  }
+  
+  .component-pricing .bg-blue-600,
+  .component-cta .bg-blue-600 {
+    background-color: var(--component-color) !important;
+  }
+  
+  .component-cta .bg-blue-50,
+  .component-cta .dark\\:bg-blue-900\\/20 {
+    background-color: color-mix(in srgb, var(--component-color) 10%, transparent) !important;
+  }
+  
+  .component-wrapper .bg-blue-50,
+  .component-wrapper .bg-blue-100,
+  .component-wrapper .bg-primary\\/20 {
+    background-color: color-mix(in srgb, var(--component-color) 15%, transparent) !important;
+  }
+`}</style>
     </div>
   )
 }

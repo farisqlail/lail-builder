@@ -427,6 +427,16 @@ export function BuilderInterface({
                 </Button>
               ))}
             </div>
+            {/* Text Customization Panel */}
+            {activeEditComponent && (
+              <TextCustomizationPanel
+                componentType={activeEditComponent.componentId}
+                textContent={
+                  customTextContent[`${activeEditComponent.category}-${activeEditComponent.componentId}`] || {}
+                }
+                onTextChange={handleTextChange}
+              />
+            )}
             <div className="mt-4">
               {ComponentLibrary[activeCategory] ? (
                 <ComponentSelector
@@ -442,16 +452,6 @@ export function BuilderInterface({
               )}
             </div>
 
-            {/* Text Customization Panel */}
-            {activeEditComponent && (
-              <TextCustomizationPanel
-                componentType={activeEditComponent.componentId}
-                textContent={
-                  customTextContent[`${activeEditComponent.category}-${activeEditComponent.componentId}`] || {}
-                }
-                onTextChange={handleTextChange}
-              />
-            )}
           </div>
           <div className="w-2/3 p-4 overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">Preview</h2>
