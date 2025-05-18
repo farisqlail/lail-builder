@@ -1,5 +1,7 @@
 "use client"
 
+import { useRouter } from "next/navigation";
+
 import {
   Navbar,
   NavbarBrand,
@@ -19,12 +21,20 @@ interface NavbarComponentProps {
 }
 
 export function NavbarComponent({ onExport }: NavbarComponentProps) {
+  const router = useRouter();
+
+  const toHome = () => {
+    router.push('/')
+  }
   return (
     <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 w-full">
       <div className="px-4 py-4 flex justify-between items-center w-full">
-        <Link href="/" className="font-bold text-xl">
-          Lail Builder
-        </Link>
+        <div className="flex items-center cursor-pointer" onClick={toHome}>
+          <div className="w-10 h-10 bg-[#3b82f6] rounded-full flex items-center justify-center mr-3">
+            <img src="/favicon.png" className="rounded-full" alt="logo" />
+          </div>
+          <span className="text-xl font-semibold text-[#333333]">Lail Builder</span>
+        </div>
         <div>
           <ThemeToggle />
         </div>

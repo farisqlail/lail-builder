@@ -36,16 +36,6 @@ export function Hero() {
               className="w-full h-auto"
             />
           </div>
-          <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-white rounded-full py-2 px-4 shadow-md">
-            <div className="flex items-center space-x-1">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="w-6 h-6 bg-gray-200 rounded-full overflow-hidden">
-                  <div className="w-full h-full bg-gray-300"></div>
-                </div>
-              ))}
-              <span className="ml-2 text-sm text-[#666666]">1,456 Happy Users</span>
-            </div>
-          </div>
         </div>
       </div>
     </section>
