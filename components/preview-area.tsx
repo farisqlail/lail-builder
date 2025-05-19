@@ -115,7 +115,7 @@ export function PreviewArea({
                       >
                         <Type size={16} />
                       </Button>
-                      {/* <div className="flex items-center">
+                      <div className="flex items-center">
                         <input
                           type="color"
                           value={color}
@@ -123,7 +123,7 @@ export function PreviewArea({
                           className="w-8 h-8 rounded-md cursor-pointer border border-gray-300 dark:border-gray-700"
                           title="Change component color"
                         />
-                      </div> */}
+                      </div>
                       <Button
                         isIconOnly
                         color="danger"
