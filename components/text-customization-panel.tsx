@@ -1,16 +1,98 @@
 "use client"
 
-import { useState } from "react"
-import { Input, Textarea, Accordion, AccordionItem, Button } from "@nextui-org/react"
+import { useState, useEffect } from "react"
+import {
+  Input,
+  Textarea,
+  Accordion,
+  AccordionItem,
+  Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ScrollShadow,
+} from "@nextui-org/react"
 
 interface TextCustomizationPanelProps {
   componentType: string
   textContent: any
-  onTextChange: (key: string, value: any) => void
+  isOpen: boolean
+  onClose: () => void
+  onSave: (newContent: any) => void
 }
 
-export function TextCustomizationPanel({ componentType, textContent, onTextChange }: TextCustomizationPanelProps) {
-  const [activeKey, setActiveKey] = useState<string | null>("general")
+export function TextCustomizationPanel({
+  componentType,
+  textContent,
+  isOpen,
+  onClose,
+  onSave,
+}: TextCustomizationPanelProps) {
+  const [localContent, setLocalContent] = useState<any>(textContent || {})
+
+  // Reset local content when textContent changes or modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setLocalContent(JSON.parse(JSON.stringify(textContent || {})))
+    }
+  }, [textContent, isOpen])
+
+  const handleLocalChange = (key: string, value: any) => {
+    // Deep clone to avoid mutating state directly
+    const newContent = JSON.parse(JSON.stringify(localContent))
+    
+    // Handle nested properties with dot notation
+    if (key.includes(".") || key.includes("[")) {
+      // Parse the path and set the value
+      const parts = key.split(".")
+      let current = newContent
+
+      for (let i = 0; i < parts.length - 1; i++) {
+        const part = parts[i]
+
+        // Handle array notation like "items[0]"
+        if (part.includes("[")) {
+          const arrayName = part.split("[")[0]
+          const index = Number.parseInt(part.split("[")[1].replace("]", ""))
+
+          if (!current[arrayName]) current[arrayName] = []
+          if (!current[arrayName][index]) {
+            // If it's an object in the array
+            if (i < parts.length - 2) {
+              current[arrayName][index] = {}
+            }
+          }
+
+          current = current[arrayName][index]
+        } else {
+          if (!current[part]) {
+            current[part] = {}
+          }
+          current = current[part]
+        }
+      }
+
+      // Set the final value
+      const lastPart = parts[parts.length - 1]
+      if (lastPart.includes("[")) {
+        const arrayName = lastPart.split("[")[0]
+        const index = Number.parseInt(lastPart.split("[")[1].replace("]", ""))
+
+        if (!current[arrayName]) current[arrayName] = []
+        current[arrayName][index] = value
+      } else {
+        current[lastPart] = value
+      }
+    } else {
+      // Simple property
+      newContent[key] = value
+    }
+
+    setLocalContent(newContent)
+  }
+
   const renderInputField = (key: string, value: any, path = "") => {
     const fullPath = path ? `${path}.${key}` : key
 
@@ -39,7 +121,7 @@ export function TextCustomizationPanel({ componentType, textContent, onTextChang
                   onChange={(e) => {
                     const newArray = [...value]
                     newArray[index] = e.target.value
-                    onTextChange(fullPath, newArray)
+                    handleLocalChange(fullPath, newArray)
                   }}
                 />
               )
@@ -52,7 +134,7 @@ export function TextCustomizationPanel({ componentType, textContent, onTextChang
             className="mt-2"
             onPress={() => {
               const newArray = [...value, typeof value[0] === "string" ? "" : {}]
-              onTextChange(fullPath, newArray)
+              handleLocalChange(fullPath, newArray)
             }}
           >
             Add Item
@@ -81,7 +163,7 @@ export function TextCustomizationPanel({ componentType, textContent, onTextChang
           }
           value={value}
           className="mb-4"
-          onChange={(e) => onTextChange(fullPath, e.target.value)}
+          onChange={(e) => handleLocalChange(fullPath, e.target.value)}
         />
       )
     } else {
@@ -97,7 +179,7 @@ export function TextCustomizationPanel({ componentType, textContent, onTextChang
           }
           value={value}
           className="mb-4"
-          onChange={(e) => onTextChange(fullPath, e.target.value)}
+          onChange={(e) => handleLocalChange(fullPath, e.target.value)}
         />
       )
     }
@@ -111,7 +193,7 @@ export function TextCustomizationPanel({ componentType, textContent, onTextChang
       other: {},
     }
 
-    Object.entries(textContent).forEach(([key, value]) => {
+    Object.entries(localContent).forEach(([key, value]) => {
       if (key.includes("heading") || key.includes("subheading") || key.includes("title") || key.includes("Name")) {
         groups.general[key] = value
       } else if (key.includes("button") || key.includes("Button")) {
@@ -129,23 +211,48 @@ export function TextCustomizationPanel({ componentType, textContent, onTextChang
   const contentGroups = groupContent()
 
   return (
-    <div className="mt-6 border border-gray-200 dark:border-gray-800 rounded-lg p-4">
-      <h3 className="text-lg font-bold mb-4">Text Customization</h3>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Customize the text content for this component</p>
+    <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside" size="2xl">
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader className="flex flex-col gap-1">
+              Text Customization
+              <p className="text-sm font-normal text-default-500">
+                Customize the text content for {componentType}
+              </p>
+            </ModalHeader>
+            <ModalBody>
+              <ScrollShadow className="h-[60vh]">
+                <Accordion defaultExpandedKeys={["general", "buttons", "features"]}>
+                  {Object.entries(contentGroups).map(([group, content]) => {
+                    if (Object.keys(content).length === 0) return null
 
-      <Accordion>
-        {Object.entries(contentGroups).map(([group, content]) => {
-          if (Object.keys(content).length === 0) return null
-
-          return (
-            <AccordionItem key={group} title={group.charAt(0).toUpperCase() + group.slice(1)} aria-label={group}>
-              <div className="px-1 py-2">
-                {Object.entries(content).map(([key, value]) => renderInputField(key, value))}
-              </div>
-            </AccordionItem>
-          )
-        })}
-      </Accordion>
-    </div>
+                    return (
+                      <AccordionItem
+                        key={group}
+                        title={group.charAt(0).toUpperCase() + group.slice(1)}
+                        aria-label={group}
+                      >
+                        <div className="px-1 py-2">
+                          {Object.entries(content).map(([key, value]) => renderInputField(key, value))}
+                        </div>
+                      </AccordionItem>
+                    )
+                  })}
+                </Accordion>
+              </ScrollShadow>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="danger" variant="light" onPress={onClose}>
+                Cancel
+              </Button>
+              <Button color="primary" onPress={() => onSave(localContent)}>
+                Apply
+              </Button>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
   )
 }

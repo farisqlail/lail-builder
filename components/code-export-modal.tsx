@@ -4,6 +4,47 @@ import { useState } from "react"
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Tabs, Tab } from "@nextui-org/react"
 import { Copy, Download, Check } from 'lucide-react'
 
+interface Testimonial {
+  name: string
+  company: string
+  text: string
+}
+
+interface Plan {
+  name: string
+  price: string
+  features: string[]
+  buttonText?: string
+  description?: string
+}
+
+interface FooterColumn {
+  title: string
+  links: string[]
+}
+
+interface ComponentTextContent {
+  companyName?: string
+  menuItems?: string[]
+  buttonText?: string | string[]
+  contactInfo?: string
+  topMenuItems?: string[]
+  heading?: string
+  subheading?: string
+  features?: string[]
+  featureDescriptions?: string[]
+  testimonials?: Testimonial[]
+  quote?: string
+  author?: string
+  position?: string
+  plans?: Plan[]
+  copyright?: string
+  socialLinks?: string[]
+  companyDescription?: string
+  columns?: FooterColumn[]
+  address?: string
+}
+
 interface CodeExportModalProps {
   isOpen: boolean
   onClose: () => void
@@ -16,7 +57,7 @@ interface CodeExportModalProps {
     cta: string | null
     footer: string | null
   }
-  customTextContent: Record<string, any>
+  customTextContent: Record<string, ComponentTextContent>
   componentColors?: Record<string, string>
 }
 
@@ -40,7 +81,7 @@ export default function HomePage() {
       if (!componentId) return
 
       // Get the component's source code
-      const componentCode = getComponentSourceCode(category, componentId)
+      const componentCode = getComponentSourceCode(category, componentId, componentColors[category])
 
       // Add the component JSX directly
       code += `      {/* ${category.charAt(0).toUpperCase() + category.slice(1)}: ${componentId} */}\n`
@@ -69,7 +110,7 @@ export default function HomePage() {
     return code
   }
 
-  const getComponentSourceCode = (category, componentId, componentColor = "#3b82f6") => {
+  const getComponentSourceCode = (category: string, componentId: string, componentColor = "#3b82f6") => {
     // Get the custom text content for this component
     const textContent = customTextContent[`${category}-${componentId}`] || {}
     const colorStyle = componentColor ? `style={{ backgroundColor: "${componentColor}" }}` : ""
@@ -732,7 +773,7 @@ export default function HomePage() {
     }
   }
 
-  const getFullComponentCode = (category, componentId) => {
+  const getFullComponentCode = (category: string, componentId: string) => {
     // Get the custom text content for this component
     const textContent = customTextContent[`${category}-${componentId}`] || {}
 
@@ -1537,7 +1578,7 @@ export default function HomePage() {
     return htmlCode
   }
 
-  const getComponentHTML = (category, componentId) => {
+  const getComponentHTML = (category: string, componentId: string) => {
     // Ambil data teks custom untuk komponen ini
     const textContent = customTextContent[`${category}-${componentId}`] || {}
   
@@ -2057,4 +2098,17 @@ export default function HomePage() {
       </ModalContent>
     </Modal>
   )
+}
+
+function hexToRgb(hex: string) {
+  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
+  hex = hex.replace(shorthandRegex, (m, r, g, b) => {
+    return r + r + g + g + b + b
+  })
+
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+  return result
+    ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
+    : "0, 0, 0"
 }

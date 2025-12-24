@@ -35,7 +35,7 @@ const colorSchemes = [
   { label: "Green (Fresh & Natural)", value: "#10b981" },
   { label: "Purple (Creative)", value: "#8b5cf6" },
   { label: "Pink (Bold & Modern)", value: "#ec4899" },
-  { label: "Orange (Energetic)", value: "#f59e0b" },
+  { label: "Orange (Energetic)", value: "#f97316" },
   { label: "Red (Passionate)", value: "#ef4444" },
   { label: "Teal (Balanced)", value: "#14b8a6" },
   { label: "Gray (Minimal)", value: "#6b7280" },
@@ -64,9 +64,11 @@ export default function AIGeneratorPage() {
   const [businessName, setBusinessName] = useState("")
   const [businessType, setBusinessType] = useState("")
   const [businessDescription, setBusinessDescription] = useState("")
-  const [colorScheme, setColorScheme] = useState("")
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([])
-  const [additionalInfo, setAdditionalInfo] = useState("")
+  
+  // Default color scheme since step 3 is removed
+  const [colorScheme] = useState("#3b82f6") 
+  const [additionalInfo] = useState("")
 
   const handleFeatureToggle = (feature: string) => {
     if (selectedFeatures.includes(feature)) {
@@ -107,7 +109,7 @@ export default function AIGeneratorPage() {
     // and pass it to the builder page
 
     setGenerating(false)
-    setStep(4)
+    setStep(3)
   }
 
   const handleViewWebsite = () => {
@@ -134,11 +136,10 @@ export default function AIGeneratorPage() {
 
           {/* Progress indicator */}
           <div className="mb-8">
-            <Progress value={(step / 4) * 100} color="primary" className="h-2" aria-label="Generation progress" />
+            <Progress value={(step / 3) * 100} color="primary" className="h-2" aria-label="Generation progress" />
             <div className="flex justify-between mt-2 text-sm text-gray-600 dark:text-gray-400">
               <span>Business Info</span>
               <span>Features</span>
-              <span>Design</span>
               <span>Result</span>
             </div>
           </div>
@@ -219,64 +220,9 @@ export default function AIGeneratorPage() {
                     </Button>
                     <Button
                       color="primary"
-                      endContent={<ArrowRight size={16} />}
-                      onPress={handleNext}
-                      isDisabled={selectedFeatures.length < 3}
-                    >
-                      Next
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 3: Design Preferences */}
-              {step === 3 && (
-                <div className="space-y-6">
-                  <h2 className="text-xl font-semibold">Design Preferences</h2>
-
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Choose a color scheme</label>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        {colorSchemes.map((scheme) => (
-                          <div
-                            key={scheme.value}
-                            className={`
-                              cursor-pointer rounded-md p-3 border-2 flex flex-col items-center
-                              ${colorScheme === scheme.value ? "border-primary" : "border-gray-200 dark:border-gray-700"}
-                            `}
-                            onClick={() => setColorScheme(scheme.value)}
-                          >
-                            <div className="w-8 h-8 rounded-full mb-2" style={{ backgroundColor: scheme.value }}></div>
-                            <span className="text-xs text-center">{scheme.label}</span>
-                            {colorScheme === scheme.value && (
-                              <div className="absolute top-1 right-1">
-                                <Check size={16} className="text-primary" />
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <Textarea
-                      label="Additional Information (Optional)"
-                      placeholder="Any other details you'd like us to consider when generating your website"
-                      value={additionalInfo}
-                      onChange={(e) => setAdditionalInfo(e.target.value)}
-                      minRows={3}
-                    />
-                  </div>
-
-                  <div className="flex justify-between">
-                    <Button variant="flat" onPress={handleBack}>
-                      Back
-                    </Button>
-                    <Button
-                      color="primary"
                       endContent={<Sparkles size={16} />}
                       onPress={handleGenerate}
-                      isDisabled={!colorScheme}
+                      isDisabled={selectedFeatures.length < 3}
                       isLoading={generating}
                     >
                       Generate Website
@@ -285,8 +231,8 @@ export default function AIGeneratorPage() {
                 </div>
               )}
 
-              {/* Step 4: Result */}
-              {step === 4 && generatedTemplate && (
+              {/* Step 3: Result */}
+              {step === 3 && generatedTemplate && (
                 <div className="space-y-6">
                   <div className="text-center">
                     <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -313,14 +259,6 @@ export default function AIGeneratorPage() {
                         {selectedFeatures
                           .map((f) => importantFeatures.find((feature) => feature.value === f)?.label)
                           .join(", ")}
-                      </li>
-                      <li className="flex items-center">
-                        <span className="font-medium mr-2">Color Scheme:</span>
-                        <div
-                          className="w-4 h-4 rounded-full inline-block mr-1"
-                          style={{ backgroundColor: colorScheme }}
-                        ></div>
-                        {colorSchemes.find((c) => c.value === colorScheme)?.label}
                       </li>
                     </ul>
                   </div>
