@@ -12,7 +12,7 @@ import { DndProvider } from "react-dnd"
 import { HTML5Backend } from "react-dnd-html5-backend"
 
 // Define the default text content for each component type
-const defaultTextContent = {
+const defaultTextContent: Record<string, any> = {
   "simple-header": {
     companyName: "Company Name",
     menuItems: ["Home", "Features", "Pricing", "About"],
@@ -249,10 +249,11 @@ export function BuilderInterface({
 
   const handleComponentSelect = (category: string, componentId: string) => {
     // Validate that the component exists before setting it
-    if (ComponentLibrary[category] && ComponentLibrary[category][componentId]) {
+    const lib = ComponentLibrary as any
+    if (lib[category] && lib[category][componentId]) {
       setSelectedComponents((prev) => ({
         ...prev,
-        [category]: componentId,
+        [category as keyof typeof prev]: componentId,
       }))
 
       // Initialize custom text content if not already set
@@ -270,7 +271,7 @@ export function BuilderInterface({
   const handleRemoveComponent = (category: string) => {
     setSelectedComponents((prev) => ({
       ...prev,
-      [category]: null,
+      [category as keyof typeof prev]: null,
     }))
 
     // Also remove the color setting for this component
@@ -288,10 +289,11 @@ export function BuilderInterface({
 
   const handleDropComponent = (item: { type: string; id: string }) => {
     // Validate that the component exists before setting it
-    if (ComponentLibrary[item.type] && ComponentLibrary[item.type][item.id]) {
+    const lib = ComponentLibrary as any
+    if (lib[item.type] && lib[item.type][item.id]) {
       setSelectedComponents((prev) => ({
         ...prev,
-        [item.type]: item.id,
+        [item.type as keyof typeof prev]: item.id,
       }))
 
       // Initialize custom text content if not already set
@@ -313,70 +315,17 @@ export function BuilderInterface({
     }))
   }
 
-  const handleTextChange = (key: string, value: any) => {
+  const handleSaveTextCustomization = (newContent: any) => {
     if (!activeEditComponent) return
 
     const componentKey = `${activeEditComponent.category}-${activeEditComponent.componentId}`
 
-    // Handle nested properties with dot notation
-    if (key.includes(".") || key.includes("[")) {
-      const newTextContent = { ...customTextContent[componentKey] }
+    setCustomTextContent((prev) => ({
+      ...prev,
+      [componentKey]: newContent,
+    }))
 
-      // Parse the path and set the value
-      const parts = key.split(".")
-      let current = newTextContent
-
-      for (let i = 0; i < parts.length - 1; i++) {
-        const part = parts[i]
-
-        // Handle array notation like "items[0]"
-        if (part.includes("[")) {
-          const arrayName = part.split("[")[0]
-          const index = Number.parseInt(part.split("[")[1].replace("]", ""))
-
-          if (!current[arrayName]) current[arrayName] = []
-          if (!current[arrayName][index]) {
-            // If it's an object in the array
-            if (i < parts.length - 2) {
-              current[arrayName][index] = {}
-            }
-          }
-
-          current = current[arrayName][index]
-        } else {
-          if (!current[part]) {
-            current[part] = {}
-          }
-          current = current[part]
-        }
-      }
-
-      // Set the final value
-      const lastPart = parts[parts.length - 1]
-      if (lastPart.includes("[")) {
-        const arrayName = lastPart.split("[")[0]
-        const index = Number.parseInt(lastPart.split("[")[1].replace("]", ""))
-
-        if (!current[arrayName]) current[arrayName] = []
-        current[arrayName][index] = value
-      } else {
-        current[lastPart] = value
-      }
-
-      setCustomTextContent((prev) => ({
-        ...prev,
-        [componentKey]: newTextContent,
-      }))
-    } else {
-      // Simple property
-      setCustomTextContent((prev) => ({
-        ...prev,
-        [componentKey]: {
-          ...prev[componentKey],
-          [key]: value,
-        },
-      }))
-    }
+    setActiveEditComponent(null)
   }
 
   const handleEditComponent = (category: string, componentId: string) => {
@@ -427,23 +376,15 @@ export function BuilderInterface({
                 </Button>
               ))}
             </div>
-            {/* Text Customization Panel */}
-            {activeEditComponent && (
-              <TextCustomizationPanel
-                componentType={activeEditComponent.componentId}
-                textContent={
-                  customTextContent[`${activeEditComponent.category}-${activeEditComponent.componentId}`] || {}
-                }
-                onTextChange={handleTextChange}
-              />
-            )}
+            {/* Text Customization Panel - Moved to Modal */}
+
             <div className="mt-4">
-              {ComponentLibrary[activeCategory] ? (
+              {(ComponentLibrary as any)[activeCategory] ? (
                 <ComponentSelector
                   category={activeCategory}
-                  components={ComponentLibrary[activeCategory]}
+                  components={(ComponentLibrary as any)[activeCategory]}
                   onSelect={handleComponentSelect}
-                  selectedComponent={selectedComponents[activeCategory]}
+                  selectedComponent={selectedComponents[activeCategory as keyof typeof selectedComponents]}
                 />
               ) : (
                 <div className="p-4 bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 rounded-md">
@@ -473,6 +414,20 @@ export function BuilderInterface({
           onClose={() => setIsExportModalOpen(false)}
           selectedComponents={selectedComponents}
           customTextContent={customTextContent}
+          componentColors={componentColors}
+        />
+
+        {/* Text Customization Modal */}
+        <TextCustomizationPanel
+          componentType={activeEditComponent?.componentId || ""}
+          textContent={
+            activeEditComponent
+              ? customTextContent[`${activeEditComponent.category}-${activeEditComponent.componentId}`] || {}
+              : {}
+          }
+          isOpen={!!activeEditComponent}
+          onClose={() => setActiveEditComponent(null)}
+          onSave={handleSaveTextCustomization}
         />
       </div>
     </DndProvider>

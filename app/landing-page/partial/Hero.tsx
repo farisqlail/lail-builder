@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useEffect } from "react";
 
 import { Button } from "@nextui-org/react";
-import { ArrowRight, LayoutTemplate } from "lucide-react";
+import { ArrowRight, LayoutTemplate, Sparkles } from "lucide-react";
 
 export function Hero() {
   return (
@@ -20,7 +20,13 @@ export function Hero() {
             Create stunning, responsive websites by selecting and customizing pre-built components. No coding
             required.
           </p>
-          <div className="mt-10">
+          <div className="flex gap-2 mt-10">
+            <Link href="/ai-generator">
+              <Button className="bg-transparent border border-[#3b82f6] text-[#3b82f6] rounded-full px-8 py-6 hover:bg-[#3b82f6] hover:text-white transition-colors flex items-center gap-1">
+                <Sparkles size={16} />
+                AI Generator
+              </Button>
+            </Link>
             <Link href="/builder">
               <Button className="bg-[#3b82f6] text-white rounded-full px-8 py-6 text-lg hover:bg-[#2563eb] transition-colors">
                 Start Building

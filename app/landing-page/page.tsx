@@ -5,6 +5,7 @@ import "aos/dist/aos.css";
 
 import { Header } from './partial/Header';
 import { Hero } from './partial/Hero';
+import { AI } from './partial/AI';
 import { Features } from './partial/Features';
 import { Templates } from './partial/Templates';
 import { HowItWork } from './partial/HowItWork';
@@ -21,6 +22,7 @@ export default function LandingPage() {
     <div className="min-h-screen">
       <Header />
       <Hero />
+      <AI />
       <Features />
       <Templates />
       <HowItWork />
