@@ -54,7 +54,7 @@ export function PreviewArea({
   }))
 
   // Sort components in a logical order for display
-  const orderedCategories = ["header", "hero", "features", "testimonials", "pricing", "cta", "footer"]
+  const orderedCategories: (keyof typeof selectedComponents)[] = ["header", "hero", "features", "testimonials", "pricing", "cta", "footer"]
 
   return (
     <div className="border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden">
@@ -70,7 +70,7 @@ export function PreviewArea({
         </Button>
       </div>
       <div
-        ref={drop}
+        ref={drop as unknown as React.Ref<HTMLDivElement>}
         className={`bg-gray-50 dark:bg-gray-800 min-h-[500px] overflow-y-auto ${isOver ? "border-2 border-dashed border-primary" : ""}`}
       >
         {!hasSelectedComponents ? (
@@ -84,7 +84,7 @@ export function PreviewArea({
               if (!componentId) return null
 
               // Check if the category and component exist in the library
-              if (!ComponentLibrary[category] || !ComponentLibrary[category][componentId]) {
+              if (!ComponentLibrary[category] || !(ComponentLibrary[category] as any)[componentId]) {
                 console.error(`Component not found: ${category}/${componentId}`)
                 return (
                   <div
@@ -96,7 +96,7 @@ export function PreviewArea({
                 )
               }
 
-              const Component = ComponentLibrary[category][componentId]
+              const Component = (ComponentLibrary[category] as any)[componentId]
               const color = componentColors[category] || "#3b82f6" // Default to blue if no color is set
               const textContent = customTextContent[`${category}-${componentId}`] || {}
 

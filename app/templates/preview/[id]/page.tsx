@@ -58,7 +58,7 @@ export default function TemplatePreviewPage() {
   // Render the template components in the preview
   const renderTemplateComponents = () => {
     // Order categories for display
-    const orderedCategories = ["header", "hero", "features", "testimonials", "pricing", "cta", "footer"]
+    const orderedCategories: (keyof typeof ComponentLibrary)[] = ["header", "hero", "features", "testimonials", "pricing", "cta", "footer"]
 
     return (
       <div className="preview-container">
@@ -67,11 +67,11 @@ export default function TemplatePreviewPage() {
           if (!componentId) return null
 
           // Check if the category and component exist in the library
-          if (!ComponentLibrary[category] || !ComponentLibrary[category][componentId]) {
+          if (!ComponentLibrary[category] || !(ComponentLibrary[category] as any)[componentId]) {
             return null
           }
 
-          const Component = ComponentLibrary[category][componentId]
+          const Component = (ComponentLibrary[category] as any)[componentId]
           const textContent = template.customTextContent[`${category}-${componentId}`] || {}
           const color = template.primaryColor || "#3b82f6"
 

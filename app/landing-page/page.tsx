@@ -13,7 +13,9 @@ import { Footer } from './partial/Footer';
 
 export default function LandingPage() {
   useEffect(() => {
+    // @ts-ignore
     import("aos").then((Aos) => {
+      // @ts-ignore
       Aos.init({ duration: 1000 });
     });
   }, []);
