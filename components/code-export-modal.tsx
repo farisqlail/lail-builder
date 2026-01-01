@@ -69,14 +69,14 @@ export function CodeExportModal({
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="nextjs" className="mt-4 focus-visible:outline-none max-h-[50px]">
-            <div className="border rounded-lg bg-slate-50 p-4 max-h-[50px] overflow-auto" style={{ height: "400px" }}>
+          <TabsContent value="nextjs" className="mt-4 focus-visible:outline-none">
+            <div className="border rounded-lg bg-slate-50 p-4 overflow-auto" style={{ height: "400px" }}>
               <pre className="text-sm text-slate-900 font-mono whitespace-pre">{codeContent.nextjs}</pre>
             </div>
           </TabsContent>
 
           <TabsContent value="html" className="mt-4 focus-visible:outline-none">
-            <div className="border rounded-lg bg-slate-50 p-4 max-h-[50px] overflow-auto" style={{ height: "400px" }}>
+            <div className="border rounded-lg bg-slate-50 p-4 overflow-auto" style={{ height: "400px" }}>
               <pre className="text-sm text-slate-900 font-mono whitespace-pre">{codeContent.html}</pre>
             </div>
           </TabsContent>
