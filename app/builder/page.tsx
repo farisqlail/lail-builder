@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { BuilderInterface } from "@/components/builder-interface"
+import { CodeExportProvider } from "@/components/code-export-context"
 import { templates } from "@/lib/template-data"
 
 export default function BuilderPage() {
@@ -57,11 +58,13 @@ export default function BuilderPage() {
 
   return (
     <main className="min-h-screen">
-      <BuilderInterface
+      <CodeExportProvider
         initialComponents={initialComponents}
         initialTextContent={initialTextContent}
         initialColors={initialColors}
-      />
+      >
+        <BuilderInterface />
+      </CodeExportProvider>
     </main>
   )
 }
