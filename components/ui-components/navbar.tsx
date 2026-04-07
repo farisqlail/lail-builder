@@ -16,11 +16,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { Save, FileCode, Settings, Code } from "lucide-react"
 import Link from "next/link"
 
-interface NavbarComponentProps {
-  onExport: () => void
-}
-
-export function NavbarComponent({ onExport }: NavbarComponentProps) {
+export function NavbarComponent() {
   const router = useRouter();
 
   const toHome = () => {

@@ -58,17 +58,6 @@ export function PreviewArea({
 
   return (
     <div className="border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden">
-      <div className="bg-white dark:bg-gray-900 p-4 flex justify-end gap-2">
-        <Button
-          color="primary"
-          variant="flat"
-          startContent={<Code size={16} />}
-          onPress={handleCopyCode}
-          isDisabled={!hasSelectedComponents}
-        >
-          Export Code
-        </Button>
-      </div>
       <div
         ref={drop as unknown as React.Ref<HTMLDivElement>}
         className={`bg-gray-50 dark:bg-gray-800 min-h-[500px] overflow-y-auto ${isOver ? "border-2 border-dashed border-primary" : ""}`}
@@ -82,8 +71,7 @@ export function PreviewArea({
             {orderedCategories.map((category) => {
               const componentId = selectedComponents[category]
               if (!componentId) return null
-
-              // Check if the category and component exist in the library
+              
               if (!ComponentLibrary[category] || !(ComponentLibrary[category] as any)[componentId]) {
                 console.error(`Component not found: ${category}/${componentId}`)
                 return (
